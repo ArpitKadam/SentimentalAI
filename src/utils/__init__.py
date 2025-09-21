@@ -11,6 +11,8 @@ from box.exceptions import BoxValueError
 from ensure import ensure_annotations
 from box import ConfigBox
 import pandas as pd
+import pickle
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 @ensure_annotations
 def read_yaml(path_to_yaml: Path) -> ConfigBox:
@@ -113,6 +115,51 @@ def load_data(url: str) -> pd.DataFrame:
         df = pd.read_csv(url)
         logger.info(f"data loaded successfully from {url} and shape of the data is {df.shape}")
         return df
+    except Exception as e:
+        logger.error(e)
+        raise CustomException(e, sys)
+
+@ensure_annotations
+def load_data_for_model(file_path: str) -> pd.DataFrame:
+    try:
+        df = pd.read_csv(file_path)
+        df.fillna('', inplace=True)
+        logger.debug('Data loaded and NaNs filled from %s', file_path)
+        return df
+    except Exception as e:
+        logger.error(e)
+        raise CustomException(e, sys)
+    
+def save_model(model, file_path: str) -> None:
+    """Save the trained model to a file."""
+    try:
+        with open(file_path, 'wb') as file:
+            pickle.dump(model, file)
+        logger.debug('Model saved to %s', file_path)
+    except Exception as e:
+        logger.error(e)
+        raise CustomException(e, sys)
+    
+@ensure_annotations
+def load_model(file_path: str):
+    """Load the trained model from a file."""
+    try:
+        with open(file_path, 'rb') as file:
+            model = pickle.load(file)
+        logger.debug('Model loaded from %s', file_path)
+        return model
+    except Exception as e:
+        logger.error(e)
+        raise CustomException(e, sys)
+
+@ensure_annotations
+def load_vectorizer(file_path: str) -> TfidfVectorizer:
+    """Load the vectorizer from a file."""
+    try:
+        with open(file_path, 'rb') as file:
+            vectorizer = pickle.load(file)
+        logger.debug('Vectorizer loaded from %s', file_path)
+        return vectorizer
     except Exception as e:
         logger.error(e)
         raise CustomException(e, sys)

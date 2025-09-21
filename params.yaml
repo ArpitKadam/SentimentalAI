@@ -9,3 +9,23 @@ data_preprocessing:
   lowercase: true
   remove_punct: true
   lemmatize: true
+
+model_building:
+  model_path: Artifacts/model_building
+  max_features: 2000
+  ngram_range: [1, 2]
+  learning_rate: 0.08
+  max_depth: 20
+  n_estimators: 367
+  objective: multiclass
+  num_class: 3
+  num_leaves: 31
+  metric: multi_logloss
+  is_unbalance: true
+  class_weight: balanced
+  reg_alpha: 0.1
+  reg_lambda: 0.1
+  random_state: 42
+
+model_evaluation:
+  data_path: Artifacts/model_evaluation

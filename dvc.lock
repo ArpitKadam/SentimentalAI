@@ -5,8 +5,8 @@ stages:
     deps:
     - path: params.yaml
       hash: md5
-      md5: 63e29aaf245143503c4057f681a4ac2e
-      size: 350
+      md5: 41e271303aa65821eb4938f9f2154e8d
+      size: 764
     - path: src/components/data_ingestion.py
       hash: md5
       md5: 222ef377e003098a3beae86fcbc86ff6
@@ -36,8 +36,8 @@ stages:
       size: 5571089
     - path: params.yaml
       hash: md5
-      md5: 63e29aaf245143503c4057f681a4ac2e
-      size: 350
+      md5: 41e271303aa65821eb4938f9f2154e8d
+      size: 764
     - path: src/components/data_preprocessing.py
       hash: md5
       md5: 887460edb2afa06e0f3badbc52f21aea
@@ -60,3 +60,92 @@ stages:
       md5: ba42408e7bd1e85685474d6a349ae57e.dir
       size: 5134850
       nfiles: 2
+  model_building:
+    cmd: python -m src.components.model_building
+    deps:
+    - path: Artifacts/data_preprocessing/test_processed.csv
+      hash: md5
+      md5: 4f30375397ec89fead1745ee6d70f201
+      size: 1000526
+    - path: Artifacts/data_preprocessing/train_processed.csv
+      hash: md5
+      md5: 35027dfda8274bd9356544f2ff358aa4
+      size: 4134324
+    - path: params.yaml
+      hash: md5
+      md5: 41e271303aa65821eb4938f9f2154e8d
+      size: 764
+    - path: src/components/model_building.py
+      hash: md5
+      md5: 65f1518c37ceb89951585169055dd894
+      size: 3619
+    params:
+      params.yaml:
+        model_building.class_weight: balanced
+        model_building.is_unbalance: true
+        model_building.learning_rate: 0.08
+        model_building.max_depth: 20
+        model_building.max_features: 2000
+        model_building.metric: multi_logloss
+        model_building.model_path: Artifacts/model_building
+        model_building.n_estimators: 367
+        model_building.ngram_range:
+        - 1
+        - 2
+        model_building.num_class: 3
+        model_building.objective: multiclass
+        model_building.random_state: 42
+        model_building.reg_alpha: 0.1
+        model_building.reg_lambda: 0.1
+    outs:
+    - path: Artifacts/model_building/lgbm_model.pkl
+      hash: md5
+      md5: 94f925a7a32e08c3a5123e095ec48c50
+      size: 3936382
+    - path: Artifacts/model_building/tfidf_vectorizer.pkl
+      hash: md5
+      md5: c27ed1c4338f4259c2d2ad42918a68dc
+      size: 73433
+  model_evaluation:
+    cmd: python -m src.components.model_evaluation
+    deps:
+    - path: Artifacts/data_preprocessing/test_processed.csv
+      hash: md5
+      md5: 4f30375397ec89fead1745ee6d70f201
+      size: 1000526
+    - path: Artifacts/model_building/lgbm_model.pkl
+      hash: md5
+      md5: 94f925a7a32e08c3a5123e095ec48c50
+      size: 3936382
+    - path: Artifacts/model_building/tfidf_vectorizer.pkl
+      hash: md5
+      md5: c27ed1c4338f4259c2d2ad42918a68dc
+      size: 73433
+    - path: params.yaml
+      hash: md5
+      md5: 41e271303aa65821eb4938f9f2154e8d
+      size: 764
+    - path: src/components/model_evaluation.py
+      hash: md5
+      md5: 983bce56b569187df0a08d519778bb77
+      size: 6192
+    params:
+      params.yaml:
+        model_evaluation.data_path: Artifacts/model_evaluation
+    outs:
+    - path: Artifacts/model_evaluation/classification_report.json
+      hash: md5
+      md5: 35d4c26954937a08e430d07ef5ae5f05
+      size: 899
+    - path: Artifacts/model_evaluation/confusion_matrix.png
+      hash: md5
+      md5: a11a7b67ea8d2f77489c7ca7d98c0245
+      size: 19210
+    - path: Artifacts/model_evaluation/metrics.json
+      hash: md5
+      md5: adf574d87a351758afd19bc59a9f38cb
+      size: 183
+    - path: Artifacts/model_evaluation/model_info.json
+      hash: md5
+      md5: c6a2e1a6d5d61fb6385228a10ec61512
+      size: 170

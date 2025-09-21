@@ -26,3 +26,45 @@ stages:
       - data_preprocessing.lowercase
       - data_preprocessing.remove_punct
       - data_preprocessing.lemmatize
+
+  model_building:
+    cmd: python -m src.components.model_building
+    deps:
+      - src/components/model_building.py
+      - params.yaml
+      - Artifacts/data_preprocessing/train_processed.csv
+      - Artifacts/data_preprocessing/test_processed.csv
+    outs:
+      - Artifacts/model_building/tfidf_vectorizer.pkl
+      - Artifacts/model_building/lgbm_model.pkl
+    params:
+      - model_building.model_path
+      - model_building.max_features
+      - model_building.ngram_range
+      - model_building.learning_rate
+      - model_building.max_depth
+      - model_building.n_estimators
+      - model_building.objective
+      - model_building.num_class
+      - model_building.metric
+      - model_building.is_unbalance
+      - model_building.class_weight
+      - model_building.reg_alpha
+      - model_building.reg_lambda
+      - model_building.random_state
+
+  model_evaluation:
+    cmd: python -m src.components.model_evaluation
+    deps:
+      - src/components/model_evaluation.py
+      - params.yaml
+      - Artifacts/model_building/lgbm_model.pkl
+      - Artifacts/model_building/tfidf_vectorizer.pkl
+      - Artifacts/data_preprocessing/test_processed.csv
+    outs:
+      - Artifacts/model_evaluation/metrics.json
+      - Artifacts/model_evaluation/confusion_matrix.png
+      - Artifacts/model_evaluation/model_info.json
+      - Artifacts/model_evaluation/classification_report.json
+    params:
+      - model_evaluation.data_path
