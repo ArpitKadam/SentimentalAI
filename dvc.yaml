@@ -33,7 +33,6 @@ stages:
       - src/components/model_building.py
       - params.yaml
       - Artifacts/data_preprocessing/train_processed.csv
-      - Artifacts/data_preprocessing/test_processed.csv
     outs:
       - Artifacts/model_building/tfidf_vectorizer.pkl
       - Artifacts/model_building/lgbm_model.pkl

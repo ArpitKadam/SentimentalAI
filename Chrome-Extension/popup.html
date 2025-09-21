@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sentimental AI</title>
+  <style>
+    /* Enhanced Dark Theme with Modern Design */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      color: #f9fafb;
+      width: 600px;
+      min-height: 1200px;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      pointer-events: none;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .header .subtitle {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-top: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Loading States */
+    .loading-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      flex-direction: column;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #374151;
+      border-top: 3px solid #8b5cf6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: #9ca3af;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* Content Container */
+    .content {
+      padding: 20px;
+      max-height: 650px;
+      overflow-y: auto;
+    }
+
+    .content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .content::-webkit-scrollbar-track {
+      background: #374151;
+      border-radius: 3px;
+    }
+
+    .content::-webkit-scrollbar-thumb {
+      background: #6b7280;
+      border-radius: 3px;
+    }
+
+    .content::-webkit-scrollbar-thumb:hover {
+      background: #8b5cf6;
+    }
+
+    /* Section Styling */
+    .section {
+      background: #374151;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border: 1px solid #4b5563;
+      transition: all 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      border-color: #8b5cf6;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #8b5cf6;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      border-radius: 2px;
+    }
+
+    /* Metrics Grid */
+    .metrics-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .metric {
+      background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+      padding: 16px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid #6b7280;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #8b5cf6, #10b981);
+    }
+
+    .metric:hover {
+      transform: scale(1.05);
+      border-color: #8b5cf6;
+    }
+
+    .metric-title {
+      font-size: 12px;
+      color: #d1d5db;
+      font-weight: 500;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: #f9fafb;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Chart Container */
+    .chart-container, .wordcloud-container, .trend-graph-container {
+      background: #1f2937;
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 16px;
+      border: 1px solid #374151;
+      text-align: center;
+      min-height: 300px;
+      position: relative;
+    }
+
+    .chart-container img, .wordcloud-container img, .trend-graph-container img {
+      width: 100%;
+      max-width: 460px;
+      height: auto;
+      max-height: 300px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Added download button styling */
+    .download-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .chart-container:hover .download-btn,
+    .wordcloud-container:hover .download-btn,
+    .trend-graph-container:hover .download-btn {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .download-btn:hover {
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
+
+    .download-btn:active {
+      transform: scale(0.95);
+    }
+
+    .download-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Comment List */
+    .comment-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 16px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .comment-item {
+      background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+      margin-bottom: 12px;
+      padding: 16px;
+      border-radius: 10px;
+      border-left: 4px solid #8b5cf6;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .comment-item:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+    }
+
+    .comment-text {
+      color: #f3f4f6;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .comment-sentiment {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sentiment-positive {
+      background: #10b981;
+      color: white;
+    }
+
+    .sentiment-neutral {
+      background: #6b7280;
+      color: white;
+    }
+
+    .sentiment-negative {
+      background: #ef4444;
+      color: white;
+    }
+
+    /* Error States */
+    .error-message {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      color: white;
+      padding: 16px;
+      border-radius: 10px;
+      margin: 20px;
+      text-align: center;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      background: #374151;
+      border-radius: 10px;
+      padding: 16px;
+      margin: 16px 20px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #4b5563;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #8b5cf6, #10b981);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200px 0; }
+      100% { background-position: 200px 0; }
+    }
+
+    .progress-text {
+      color: #d1d5db;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* Collapsible Sections */
+    .collapsible-header {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: #374151;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .collapsible-header:hover {
+      background: #4b5563;
+    }
+
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .collapsible-content.expanded {
+      max-height: 1000px;
+    }
+
+    .chevron {
+      transition: transform 0.3s ease;
+    }
+
+    .chevron.rotated {
+      transform: rotate(180deg);
+    }
+
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-in {
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>SENTIMENTAL AI</h1>
+    <div class="subtitle">AI-Powered Comment Analysis</div>
+  </div>
+  
+  <div id="output" class="content"></div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
