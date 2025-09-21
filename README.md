@@ -1,5 +1,5 @@
 <div align="center">
-<a><img src="static\logo.png" alt="SENTIMENTAL-AI" border="0"></a>
+<a><img src="static\logo.png" alt="SENTIMENTAL-AI" border="0" height="500"></a>
 
 # 🎭 SENTIMENTAL AI
 
