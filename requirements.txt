@@ -20,3 +20,9 @@ imbalanced-learn
 xgboost
 lightgbm
 optuna
+Flask
+Flask-Cors
+gunicorn
+dvc
+python-box
+ensure

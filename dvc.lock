@@ -1,0 +1,62 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python -m src.data.data_ingestion
+    deps:
+    - path: params.yaml
+      hash: md5
+      md5: 63e29aaf245143503c4057f681a4ac2e
+      size: 350
+    - path: src/data/data_ingestion.py
+      hash: md5
+      md5: 222ef377e003098a3beae86fcbc86ff6
+      size: 2400
+    params:
+      params.yaml:
+        data_ingestion.data_path: Artifacts/data_ingestion
+        data_ingestion.test_size: 0.2
+        data_ingestion.url: 
+          https://github.com/ArpitKadam/SentimentalAI/raw/refs/heads/main/Notebooks/data.csv
+    outs:
+    - path: Artifacts/data_ingestion
+      hash: md5
+      md5: e13bcce40396cd334c8a7a334868166a.dir
+      size: 6919701
+      nfiles: 2
+  data_preprocessing:
+    cmd: python -m src.data.data_preprocessing
+    deps:
+    - path: Artifacts/data_ingestion/test.csv
+      hash: md5
+      md5: ea97ba82a4a25627bf4ffb52572484ea
+      size: 1348612
+    - path: Artifacts/data_ingestion/train.csv
+      hash: md5
+      md5: 1bd422dd6d135bced1d6c64a3e84a45d
+      size: 5571089
+    - path: params.yaml
+      hash: md5
+      md5: 63e29aaf245143503c4057f681a4ac2e
+      size: 350
+    - path: src/data/data_preprocessing.py
+      hash: md5
+      md5: 887460edb2afa06e0f3badbc52f21aea
+      size: 3962
+    params:
+      params.yaml:
+        data_preprocessing.data_path: Artifacts/data_preprocessing
+        data_preprocessing.lemmatize: true
+        data_preprocessing.lowercase: true
+        data_preprocessing.remove_punct: true
+        data_preprocessing.stopwords_keep:
+        - not
+        - but
+        - however
+        - no
+        - yet
+    outs:
+    - path: Artifacts/data_preprocessing
+      hash: md5
+      md5: ba42408e7bd1e85685474d6a349ae57e.dir
+      size: 5134850
+      nfiles: 2

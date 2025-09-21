@@ -1,0 +1,11 @@
+data_ingestion:
+  test_size: 0.20
+  url: https://github.com/ArpitKadam/SentimentalAI/raw/refs/heads/main/Notebooks/data.csv
+  data_path: Artifacts/data_ingestion
+
+data_preprocessing:
+  data_path: Artifacts/data_preprocessing
+  stopwords_keep: ["not", "but", "however", "no", "yet"]
+  lowercase: true
+  remove_punct: true
+  lemmatize: true

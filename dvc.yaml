@@ -1,0 +1,28 @@
+stages:
+  data_ingestion:
+    cmd: python -m src.data.data_ingestion
+    deps:
+      - src/data/data_ingestion.py
+      - params.yaml
+    outs:
+      - Artifacts/data_ingestion
+    params:
+      - data_ingestion.test_size
+      - data_ingestion.url
+      - data_ingestion.data_path
+
+  data_preprocessing:
+    cmd: python -m src.data.data_preprocessing
+    deps:
+      - src/data/data_preprocessing.py
+      - Artifacts/data_ingestion/train.csv
+      - Artifacts/data_ingestion/test.csv
+      - params.yaml
+    outs:
+      - Artifacts/data_preprocessing
+    params:
+      - data_preprocessing.data_path
+      - data_preprocessing.stopwords_keep
+      - data_preprocessing.lowercase
+      - data_preprocessing.remove_punct
+      - data_preprocessing.lemmatize
