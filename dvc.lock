@@ -1,13 +1,13 @@
 schema: '2.0'
 stages:
   data_ingestion:
-    cmd: python -m src.data.data_ingestion
+    cmd: python -m src.components.data_ingestion
     deps:
     - path: params.yaml
       hash: md5
       md5: 63e29aaf245143503c4057f681a4ac2e
       size: 350
-    - path: src/data/data_ingestion.py
+    - path: src/components/data_ingestion.py
       hash: md5
       md5: 222ef377e003098a3beae86fcbc86ff6
       size: 2400
@@ -24,7 +24,7 @@ stages:
       size: 6919701
       nfiles: 2
   data_preprocessing:
-    cmd: python -m src.data.data_preprocessing
+    cmd: python -m src.components.data_preprocessing
     deps:
     - path: Artifacts/data_ingestion/test.csv
       hash: md5
@@ -38,7 +38,7 @@ stages:
       hash: md5
       md5: 63e29aaf245143503c4057f681a4ac2e
       size: 350
-    - path: src/data/data_preprocessing.py
+    - path: src/components/data_preprocessing.py
       hash: md5
       md5: 887460edb2afa06e0f3badbc52f21aea
       size: 3962

@@ -1,8 +1,0 @@
-[2025-09-21 13:23:00]   20 | INFO     | yaml file: params.yaml loaded successfully
-[2025-09-21 13:23:00]   96 | INFO     | Loaded train data: Artifacts/data_ingestion\train.csv | Shape: (29434, 2)
-[2025-09-21 13:23:00]   97 | INFO     | Loaded test data: Artifacts/data_ingestion\test.csv | Shape: (7359, 2)
-[2025-09-21 13:23:10]   57 | INFO     | Text normalization completed: Shape (29434, 2) -> (29434, 2)
-[2025-09-21 13:23:12]   57 | INFO     | Text normalization completed: Shape (7359, 2) -> (7359, 2)
-[2025-09-21 13:23:12]   77 | INFO     | Processed train data saved: Artifacts\data_preprocessing\train_processed.csv | Shape: (29434, 2)
-[2025-09-21 13:23:12]   78 | INFO     | Processed test data saved: Artifacts\data_preprocessing\test_processed.csv | Shape: (7359, 2)
-[2025-09-21 13:23:12]  104 | INFO     | Data preprocessing pipeline completed successfully.

@@ -1,8 +1,8 @@
 stages:
   data_ingestion:
-    cmd: python -m src.data.data_ingestion
+    cmd: python -m src.components.data_ingestion
     deps:
-      - src/data/data_ingestion.py
+      - src/components/data_ingestion.py
       - params.yaml
     outs:
       - Artifacts/data_ingestion
@@ -12,9 +12,9 @@ stages:
       - data_ingestion.data_path
 
   data_preprocessing:
-    cmd: python -m src.data.data_preprocessing
+    cmd: python -m src.components.data_preprocessing
     deps:
-      - src/data/data_preprocessing.py
+      - src/components/data_preprocessing.py
       - Artifacts/data_ingestion/train.csv
       - Artifacts/data_ingestion/test.csv
       - params.yaml
